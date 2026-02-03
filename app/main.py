@@ -1,25 +1,32 @@
-from fastapi import FastAPI, UploadFile, File
-from app.preprocess import preprocess_image, segment_characters
-from app.predict import predict_characters
-from app.solver import solve_equation
-from app.schemas import SolveResponse
-import cv2
-import numpy as np
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from .schemas import PredictionRequest, PredictionResponse
+from .predict import predict_equation, load_prediction_model
+import os
 
 app = FastAPI(title="Handwritten Equation Solver")
 
-@app.post("/solve", response_model=SolveResponse)
-async def solve(file: UploadFile = File(...)):
-    contents = await file.read()
-    np_img = np.frombuffer(contents, np.uint8)
-    image = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-    processed = preprocess_image(image)
-    chars = segment_characters(processed)
-    equation = predict_characters(chars)
-    solution = solve_equation(equation)
+# Templates
+templates = Jinja2Templates(directory="app/templates")
 
-    return {
-        "equation": equation,
-        "solution": solution
-    }
+@app.on_event("startup")
+async def startup_event():
+    load_prediction_model()
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(request: PredictionRequest):
+    result = predict_equation(request.image)
+    return result
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

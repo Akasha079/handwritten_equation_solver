@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Equation Solver</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-infinity"></i> MathSolver AI</h1>
+            <p>Draw any basic equation below and let AI solve it instantly.</p>
+        </header>
+
+        <main class="glass-panel">
+            <div class="canvas-container">
+                <canvas id="drawingCanvas"></canvas>
+                <div class="canvas-tools">
+                    <button id="clearBtn" class="tool-btn" title="Clear Canvas">
+                        <i class="fa-solid fa-trash-can"></i> Clear
+                    </button>
+                    <div class="status-indicator" id="statusText">Ready to draw</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="solveBtn" class="primary-btn">
+                    <span>Solve Equation</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </button>
+            </div>
+
+            <div class="result-area" id="resultArea">
+                <div class="result-card">
+                    <span class="label">Recognized</span>
+                    <h2 id="equationDisplay">...</h2>
+                </div>
+                <div class="divider">=</div>
+                <div class="result-card highlight">
+                    <span class="label">Solution</span>
+                    <h2 id="solutionDisplay">...</h2>
+                </div>
+                <div class="confidence-meter">
+                    <span class="label">Confidence</span>
+                    <div class="progress-bar">
+                        <div class="progress" id="confidenceBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
