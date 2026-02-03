@@ -1,8 +1,8 @@
 fastapi
 uvicorn
-tensorflow
-opencv-python
-numpy
-pillow
-sympy
 python-multipart
+numpy
+opencv-python-headless
+tensorflow
+pillow
+pydantic
